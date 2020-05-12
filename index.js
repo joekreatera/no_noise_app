@@ -179,12 +179,16 @@ function songEnded(){
 
     if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].songs.length  ){
       console.log("Going to play : " + playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
-      omxPlayer.newSource( getFile( playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong] ) );
-      omxPlayer.on('close' , songEnded);
+      playSong(playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
     }
   }
 }
 
+function playSong(sng){
+  omxPlayer.removeListener('close',songEnded);
+  omxPlayer.newSource( getFile( sng ) );
+  omxPlayer.on('close' , songEnded);
+}
 function processEvent(evt){
   // event has type and message {message}
   console.log("Taking event " + evt.code + " ("+evt.message+")");
@@ -198,17 +202,15 @@ function processEvent(evt){
   }else if( evt.code == 9){
     loopPlaylist = false;
   }else if (evt.code == 3){
-    omxPlayer.newSource( getFile(evt.message) );
-    omxPlayer.on('close' , songEnded);
-    //omxpPlayer.play();
+    playSong(evt.message);
   }else if (evt.code == 10){
     playlistMode.playlistName = evt.message;
     playlistMode.on = true;
     playlistMode.actualSong = 0;
 
     console.log("Going to play : " + playlistDatabase[evt.message].songs[0]);
-    omxPlayer.newSource( getFile( playlistDatabase[evt.message].songs[0] ) );
-    omxPlayer.on('close' , songEnded);
+    playSong(playlistDatabase[evt.message].songs[0]);
+
     //omxpPlayer.play();
   }else if( evt.code == 5){
     omxPlayer.play(); // not needed, pauses will toggle!
