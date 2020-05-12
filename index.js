@@ -170,8 +170,8 @@ function processOrder(order, evt){
 var loop = false;
 var loopPlaylist = false;
 var playlistMode = {playlistName:"", on:false, actualSong:0};
-function songEnded(evt){
-  console.log("Song ended!!!! " + evt);
+function songEnded(){
+  console.log("Song ended!!!! ");
   if( loop ){
 
   }
@@ -183,7 +183,7 @@ function songEnded(evt){
     playlistMode.actualSong++;
 
     if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].songs.length  ){
-      console.log("Going to play : " + playlistDatabase[eplaylistMode.playlistName].songs[0]);
+      console.log("Going to play : " + playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
       omxPlayer.newSource( getFile( playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong] ) );
       omxPlayer.play();
     }
