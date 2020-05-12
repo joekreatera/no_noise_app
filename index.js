@@ -156,7 +156,7 @@ TODO::
 */
 
 function doGeneralQuery(cb){
-  let query = db.collection('robot_events').where('status','==',0).where('robot','==',myRobot);
+  let query = db.collection('robot_events').where('status','==',0).where('robot','==', myRobot);
 
   query.get().then(querySnapshot => {
                   console.log("Getting data ... ");
@@ -164,7 +164,7 @@ function doGeneralQuery(cb){
                   var doc = null;
                   for (doc of docs) {
 
-                      console.log("doc " +  doc.data().content.message );
+                      console.log("doc " +  doc.data());
                       console.log("doc " +  doc.id );
 
                       /*
