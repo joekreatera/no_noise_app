@@ -13,6 +13,10 @@
     "node-omxplayer":"^0.5.0",
     "node-fadecandy":"^2.0.0"
   },
+  "repository":{
+    "type":"git",
+    "url":"git+https://github.com/joekreatera/no_noise_app.git"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
