@@ -327,7 +327,9 @@ function noiseSpeak(message){
 
 }
 
+// this should change as it does not reflect the internal state. Just with setMode or setLoopMode the variables should be set. idea?: make the static vars, instance vars. 
+var ledInstance = LEDControl.getInstance();
 LEDControl.setMode(LEDControl.BREATH_MODE);
 LEDControl.setLoopMode(LEDControl.PING_PONG);
-LEDControl.getInstance().init();
+ledInstance.init();
 setTimeout( syncData , 3000);
