@@ -171,6 +171,7 @@ var loop = false;
 var loopPlaylist = false;
 var playlistMode = {playlistName:"", on:false, actualSong:0};
 function songEnded(evt){
+  console.log("Song ended!!!! " + evt);
   if( loop ){
 
   }
@@ -181,8 +182,9 @@ function songEnded(evt){
   if( playlistMode.on){
     playlistMode.actualSong++;
 
-    if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].length  ){
-      omxPlayer.newSource( getFile( playlistDatabase[playlistMode.playlistName][playlistMode.actualSong] ) );
+    if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].songs.length  ){
+      console.log("Going to play : " + playlistDatabase[eplaylistMode.playlistName].songs[0]);
+      omxPlayer.newSource( getFile( playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong] ) );
       omxPlayer.play();
     }
   }
@@ -208,10 +210,11 @@ function processEvent(evt){
     playlistMode.on = true;
     playlistMode.actualSong = 0;
 
-    omxPlayer.newSource( getFile( playlistDatabase[evt.message][0] ) );
+    console.log("Going to play : " + playlistDatabase[evt.message].songs[0]);
+    omxPlayer.newSource( getFile( playlistDatabase[evt.message].songs[0] ) );
     //omxpPlayer.play();
   }else if( evt.code == 5){
-    omxPlayer.play();
+    omxPlayer.play(); // not needed, pauses will toggle!
   }else{
     if(omxPlayer.running){
 
