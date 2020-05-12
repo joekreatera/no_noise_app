@@ -123,7 +123,7 @@ class GeneralVariables{
 }
 
 GeneralVariables.initGeneralVariables("app_config.json");
-var myRobot = firebase.firestore().collection('robots').doc('kftvZp7DxGPkxO9mf0U0');
+var myRobot = firebase.firestore().collection('robot').doc('kftvZp7DxGPkxO9mf0U0');
 
 
 Polly.synthesizeSpeech(params, (err, data) => {
@@ -150,9 +150,6 @@ Polly.synthesizeSpeech(params, (err, data) => {
 
 /*
 TODO::
-1. Set config file
-2. Check if config file exists, if not, set default values
-3. load config values (maybe store them in settings)
 4. configure voice to go faster or slower with ssml
   SSML https://developer.amazon.com/it-IT/docs/alexa/custom-skills/speech-synthesis-markup-language-ssml-reference.html
 
