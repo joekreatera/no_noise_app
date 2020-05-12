@@ -200,6 +200,7 @@ function playSong(sng){
   omxPlayer.newSource( getFile( sng ) );
   omxPlayer.on('close' , songEnded);
   lastSongPlayed = sng;
+  audioAnalyzer.setSound(getFile( sng ));
 }
 
 
