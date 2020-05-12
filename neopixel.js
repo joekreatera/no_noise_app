@@ -75,6 +75,10 @@ class FCController{
 
     this.fc = new FadeCandy();
     FCController.instance = this;
+  }
+
+
+  init(){
 
     this.fc.on(FadeCandy.events.READY, function () {
 
