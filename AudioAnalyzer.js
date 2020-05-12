@@ -34,9 +34,10 @@ class AudioAnalyzer{
 
   /* s in  miliseconds according to song start*/
   getDataOnTime(s){
-    console.log("Tryning time " + s);
-    var index = Math.floor(AudioAnalyzer.getInstance().samplerate/1000)*s;}
+    console.log("Trying time" + s);
+    var index = Math.floor(AudioAnalyzer.getInstance().samplerate/1000)*s;
     console.log("Tryning index  " + index);
+
     if( index < AudioAnalyzer.getInstance().pcmdata.length ){
       return AudioAnalyzer.getInstance().pcmdata[index];
     }
