@@ -43,7 +43,9 @@ const Omx = require('node-omxplayer');
 const GENERAL_QUERY = 0;
 
 const omxPlayer = Omx();
+omxPlayer.on('close' , songEnded);
 
+var playlistDatabase = require("./playlists.json");
 var firebase = require("firebase-admin");
 var serviceAccount = require("../noiseapptest-ec4b1-e28db7fb0b4c.json");
 var session_test = "";
@@ -159,19 +161,76 @@ function getFile(fl){
   return fileVault+fl;
 }
 
+function processOrder(order, evt){
+  if (order == 3){
+    omxPlayer.newSource( getFile(evt.message) );
+  }
+}
+
+var loop = false;
+var loopPlaylist = false;
+var playlistMode = {playlistName:"", on:false, actualSong:0};
+function songEnded(evt){
+  if( loop ){
+
+  }
+  if( loopPlaylist ){
+
+  }
+
+  if( playlistMode.on){
+    playlistMode.actualSong++;
+
+    if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].length  ){
+      omxPlayer.newSource( getFile( playlistDatabase[playlistMode.playlistName][playlistMode.actualSong] ) );
+      omxPlayer.play();
+    }
+  }
+}
+
 function processEvent(evt){
   // event has type and message {message}
   console.log("Taking event " + evt.code + " ("+evt.message+")");
 
-  if( evt.code == 1){
-  //  omxPlayer.volUp();
-  }
-  if( evt.code == 2){
-  //  omxPlayer.volDown();
-  }
-  if( evt.code == 3){
+  if( evt.code == 6){
+    loop = true;
+  }else if( evt.code == 7){
+    loop = false;
+  }else if( evt.code == 8){
+    loopPlaylist = true;
+  }else if( evt.code == 9){
+    loopPlaylist = false;
+  }else if (evt.code == 3){
     omxPlayer.newSource( getFile(evt.message) );
+    omxpPlayer.play();
+  }else if (evt.code == 10){
+    playlistMode.playlistName = evt.message;
+    playlistMode.on = true;
+    playlistMode.actualSong = 0;
+
+    omxPlayer.newSource( getFile( playlistDatabase[evt.message][0] ) );
+    omxpPlayer.play();
+  }else if( evt.code == 5){
+    omxPlayer.play();
+  }else{
+    if(omxPlayer.running){
+
+      if( evt.code == 1){
+        omxPlayer.volUp();
+      }
+
+      if( evt.code == 2){
+        omxPlayer.volDown();
+      }
+
+      if( evt.code == 4){
+        omxPlayer.pause();
+      }
+
+
+    }
   }
+
 
 }
 

@@ -1,0 +1,38 @@
+{
+  "white":{
+      "songs":[
+          "White Noise 6 dBFS.wav",
+          "White noise 0dBFS.wav"
+      ]
+  },
+  "pink":{
+      "songs":[
+          "Pink Noise.wav"
+      ]
+  },
+  "violet":{
+      "songs":[
+          "Violet Noise.wav"
+      ]
+  },
+  "red":{
+      "songs":[
+          "Red Noise.wav"
+      ]
+  },
+  "bllue":{
+      "songs":[
+          "Blue noise.wav"
+      ]
+  },
+  "nature":{
+      "songs":[
+          "birds-2.mp3",
+          "forest-1.mp3",
+          "Sea-1.mp3",
+          "Storm-1.mp3",
+          "Lluvia-1.mp3"
+      ]
+  }
+
+}
