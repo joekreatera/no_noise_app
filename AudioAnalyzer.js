@@ -18,7 +18,7 @@ class AudioAnalyzer{
   }
 
   setSound(snd, fs){
-    decodeSoundFile(snd, fs);
+    this.decodeSoundFile(snd, fs);
   }
 
   decodeSoundFile(soundfile, fs){
