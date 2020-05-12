@@ -164,10 +164,10 @@ function processEvent(evt){
   console.log("Taking event " + evt.code + " ("+evt.message+")");
 
   if( evt.code == 1){
-    omxPlayer.volUp();
+  //  omxPlayer.volUp();
   }
   if( evt.code == 2){
-    omxPlayer.volDown();
+  //  omxPlayer.volDown();
   }
   if( evt.code == 3){
     omxPlayer.newSource( getFile(evt.message) );
