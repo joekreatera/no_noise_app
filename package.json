@@ -1,7 +1,7 @@
 {
-  "name": "togoapp",
+  "name": "noiseapp",
   "version": "1.0.0",
-  "description": "togo app for use at raspberry, synch data from firebase",
+  "description": "noise app for use at raspberry, synch data from firebase",
   "main": "index.js",
   "dependencies": {
     "ask-sdk": "^2.8.0",
