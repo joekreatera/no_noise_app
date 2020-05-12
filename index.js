@@ -41,9 +41,10 @@ const fileVault = "../noisesWavs/all/";
 const Omx = require('node-omxplayer');
 const LEDControl = require('./neopixel.js');
 const GENERAL_QUERY = 0;
+const AudioAnalyzer = require('./AudioAnalyzer.js');
 
 const omxPlayer = Omx();
-
+const audioAnalyzer = new AudioAnalyzer();
 
 var playlistDatabase = require("./playlists.json");
 var firebase = require("firebase-admin");
@@ -190,13 +191,34 @@ function songEnded(){
   }
 }
 
+var songTime = 0;
+var prevSongTime = 0;
 function playSong(sng){
-
+  songTime = 0;
+  prevSongTime = 0;
   omxPlayer.removeListener('close',songEnded);
   omxPlayer.newSource( getFile( sng ) );
   omxPlayer.on('close' , songEnded);
   lastSongPlayed = sng;
 }
+
+
+function updateSongTime(){
+  if(omxPlayer.running){
+    var now =  (new Date()).getTime()
+    songTime  += now - prevSongTime;
+    prevSongTime = now;
+  }else{
+    var now =  (new Date()).getTime()
+    prevSongTime = now;
+  }
+}
+
+function pauseSong(sng){
+  omxPlayer.pause();
+
+}
+
 function processEvent(evt){
   // event has type and message {message}
   console.log("Taking event " + evt.code + " ("+evt.message+")");
@@ -240,7 +262,7 @@ function processEvent(evt){
       }
 
       if( evt.code == 4){
-        omxPlayer.pause();
+        pauseSong();
       }
 
 
@@ -327,9 +349,22 @@ function noiseSpeak(message){
 
 }
 
-// this should change as it does not reflect the internal state. Just with setMode or setLoopMode the variables should be set. idea?: make the static vars, instance vars. 
+function getColor(){
+
+  if(omxPlayer.running){
+    var pcmdata= audioAnalyzer.getDataOnTime(songTime);
+    console.log(pcmdata);
+  }
+  return LEDControl.buildColor( Math.floor(255*Math.random())  ,0,0);
+}
+
+// this should change as it does not reflect the internal state. Just with setMode or setLoopMode the variables should be set. idea?: make the static vars, instance vars.
 var ledInstance = LEDControl.getInstance();
-LEDControl.setMode(LEDControl.BREATH_MODE);
+//LEDControl.setMode(LEDControl.BREATH_MODE);
 LEDControl.setLoopMode(LEDControl.PING_PONG);
+LEDControl.setMode(LEDControl.FREESTYLE_MODE);
+LEDControl.setColorFunction(getColor);
+LEDControl.setSyncFunction(updateSongTime);
+
 ledInstance.init();
 setTimeout( syncData , 3000);

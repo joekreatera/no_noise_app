@@ -31,6 +31,10 @@ class FCController{
     FCController.mode = m;
   }
 
+  static setSyncFunction(cb){
+    FCController.syncFunction = cb ; // this one should return a color to be displayed
+  }
+
   static setColorFunction(cb){
     FCController.colorFunction = cb ; // this one should return a color to be displayed
   }
@@ -64,6 +68,7 @@ class FCController{
     FCController.loopMode = 0;
     FCController.chaseWidth = 6;
 
+    FCController.syncFunction = null;
     FCController.BREATH_MODE = 0;
     FCController.CHASE_MODE = 1;
     FCController.CHASE_BREATH_MODE = 2;
@@ -105,7 +110,8 @@ class FCController{
 
 
         setInterval(function () {
-
+          if( FCController.syncFunction() != null )
+            FCController.syncFunction();
           let data = new Uint8Array(totalLedCount * 3);
 
           if(FCController.mode == FCController.BREATH_MODE)
