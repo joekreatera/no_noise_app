@@ -21,7 +21,7 @@ class AudioAnalyzer{
     this.decodeSoundFile(snd, fs);
   }
 
-  decodeSoundFile(soundfile, fs){
+  decodeSoundFile(soundFile, fs){
     console.log("decoding mp3 file ", soundfile, " ..... ")
     var buf = fs.readFileSync(soundFile);
     this.context.decodeAudioData(buf , (audioBuffer)=>{
