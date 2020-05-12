@@ -66,9 +66,9 @@ const Polly = new AWS.Polly({
 // Create the Speaker instance
 
 let params = {
-    'Text': 'Hi there! I\'m current Togo voice! . Today is may ' + 5,
+    'Text': 'Hi there! I\'m current Noise voice! . Today is may ' + 12,
     'OutputFormat': 'pcm',
-    'VoiceId': 'Justin'
+    'VoiceId': 'Kendra'
 };
 
 
@@ -96,13 +96,7 @@ class GeneralComponents{
 class GeneralVariables{
   // month is 0 based
   static genVars = {
-    wakeuptime_week:'09:00',
-    wakeuptime_alarm_done:false,
-    this_date:{
-        day:4,
-        month:4,
-        year:2020
-    }
+    config_data:"NONE"
   };
 
   static configFile= "";
@@ -112,9 +106,6 @@ class GeneralVariables{
     if (!fs.existsSync(GeneralVariables.configFile)){
         //file exists
         var td = new Date();
-        genVars.this_date.day = td.getDate();
-        genVars.this_date.month = td.getMonth();
-        genVars.this_date.year = td.getYear();
         fs.writeFileSync(GeneralVariables.configFile , JSON.stringify(GeneralVariables.genVars) );
     }
 
@@ -132,7 +123,7 @@ class GeneralVariables{
 }
 
 GeneralVariables.initGeneralVariables("app_config.json");
-var myRobot = firebase.firestore().collection('robots').doc('6yYw4qaILiu2oa60NOV2');
+var myRobot = firebase.firestore().collection('robots').doc('kftvZp7DxGPkxO9mf0U0');
 
 
 Polly.synthesizeSpeech(params, (err, data) => {
@@ -175,22 +166,25 @@ function doGeneralQuery(cb){
                   let docs = querySnapshot.docs;
                   var doc = null;
                   for (doc of docs) {
-                      // classify the documents! we should not have more than one document at a time
+
                       console.log("doc " +  doc.data().content.message );
                       console.log("doc " +  doc.id );
 
-                      if( doc.data().content.routine == "wakeuptime_week"){
-                        GeneralVariables.update("wakeuptime_week", doc.data().content.message);
-                      }
+                      /*
+
+                      Insert code here
+                      to set voluma up, down, change playlist, change song, change led mode
+
+                      Is possible to get a lot of events at the same time, apply them in order
+                      */
+
+
                       db.collection('robot_events').doc(doc.id).update("status",1).catch((err)=>{
                         console.log("Could not update! "  + err);
                       });
                   }
 
-                  if( doc != null ){ // should check if the update is from  wake up
-                    togoSpeak('I have set up wake up time to ' + doc.data().content.message);
 
-                  }
                   // finished process
                   cb();
 
@@ -199,118 +193,11 @@ function doGeneralQuery(cb){
   );
 }
 
-
-
-
-
-function doMorningRoutine(callback){
-  // check any of the alarms
-  console.log("ENTERED ON MORNING ROUTINE GET");
-
-
-
-        let query = db.collection('routines').where('robot','==',myRobot).where('routine_name', '==' , 'wakeup_week');
-
-        state = GENERAL_QUERY;
-        query.get().then((querySnapshot)=>{
-          console.log("ENTERED ON QUERY RETURN ");
-            let docs = querySnapshot.docs;
-
-            for(let doc of docs){
-
-              let steps = doc.data().steps;
-
-              actualRoutineList = steps;
-              state = ACTIVITY_CHECK;
-            }
-
-            callback();
-        });
-
-}
-
-
-function doActivityCheck(cb){
-  let query = db.collection('robot_events').where('robot','==',myRobot).where('status','==',0).where('type','==', 6);
-
-  query.get().then(querySnapshot => {
-                  console.log("Getting data from activity check ... ");
-                  let docs = querySnapshot.docs;
-                  var doc = null;
-                  var doNextRouting = false;
-                  var wasCancelled = false;
-                  for (doc of docs) {
-                      console.log("Completed1? " + doc.id);
-                      if( doc.data().content.message == "CANCEL"){
-                        while (actualRoutineList.length > 0) {
-                          actualRoutineList.shift();
-                        }
-
-                        wasCancelled = true;
-                      }else{
-                        actualRoutineList.shift();
-                        doNextRouting = true;
-                      }
-
-                      db.collection('robot_events').doc(doc.id).update("status",1).catch((err)=>{
-                        console.log("Could not update! "  + err);
-                      });
-                  }
-
-                  if( doNextRouting ){ // should check if the update is from  wake up
-
-                    console.log(actualRoutineList);
-
-                    if( actualRoutineList.length <= 0 ){
-                      state = GENERAL_QUERY;
-                      togoSpeak('You have completed all the tasks! Congratulations! ' );
-                    }
-                  }
-                  if( wasCancelled ){
-                    state = GENERAL_QUERY;
-                    togoSpeak('Let\'s do something else!' );
-                  }
-                  if( actualRoutineList.length > 0 ){
-                    togoSpeak('Now it\'s time to ' + actualRoutineList[0].activity + '' );
-                  }
-                  // finished process
-                  cb();
-
-                  //app.delete().then( () => { console.log( "Finished"); });
-              }
-  );
-}
-
-function checkAlarms(){
-
-  if( !GeneralVariables.getVariable("wakeuptime_alarm_done") ){
-    // TODO:: maybe not equal but greater than. not needed right now
-    if( GeneralVariables.getVariable("wakeuptime_week")  == parseActualHour() ){
-          togoSpeak("It is time to wake up sunshine!!!");
-          GeneralVariables.update("wakeuptime_alarm_done",true);
-          state = MORNING_ROUTINE_GET;
-    }
-  }
-
-}
 
 function syncData(){
   if( state == GENERAL_QUERY){
     doGeneralQuery( () => {
-      checkAlarms();
-      setTimeout( syncData , 4000);
-    } );
-  }
 
-  if( state == MORNING_ROUTINE_GET){
-  doMorningRoutine( () => {
-    setTimeout( syncData , 4000);
-    } );
-  }
-
-  if( state == ACTIVITY_CHECK ){
-      // ask database for any robot event status 0, type = 6
-    doActivityCheck( ()=>{
       setTimeout( syncData , 4000);
     } );
   }
@@ -322,11 +209,11 @@ function parseActualHour(){
   return (""+dt.getHours()).padStart(2,"0") + ":" + (""+dt.getMinutes()).padStart(2,"0");
 }
 
-function togoSpeak(message){
+function noiseSpeak(message){
   let params = {
       'Text': message ,
       'OutputFormat': 'pcm',
-      'VoiceId': 'Justin'
+      'VoiceId': 'Kendra'
   };
   Polly.synthesizeSpeech(params, (err, data) => {
       if (err) {
