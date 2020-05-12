@@ -39,7 +39,7 @@ const Speaker = require('speaker');
 const fs = require('fs');
 const fileVault = "../noisesWavs/all/";
 const Omx = require('node-omxplayer');
-
+const LEDControl = require('./neopixel.js');
 const GENERAL_QUERY = 0;
 
 const omxPlayer = Omx();
@@ -166,6 +166,8 @@ var loop = false;
 var loopPlaylist = false;
 var playlistMode = {playlistName:"", on:false, actualSong:0};
 var lastSongPlayed = "";
+
+
 function songEnded(){
   console.log("Song ended!!!! ");
   if( loop ){
@@ -182,6 +184,7 @@ function songEnded(){
       playSong(playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
     }else if( loopPlaylist ){
         playlistMode.actualSong = 0;
+        console.log("Going to play : " + playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
         playSong(playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
     }
   }
@@ -227,10 +230,12 @@ function processEvent(evt){
     if(omxPlayer.running){
 
       if( evt.code == 1){
+        // should set an original of 0 and 2+ and 8-
         omxPlayer.volUp();
       }
 
       if( evt.code == 2){
+        // should set an original of 0 and 2+ and 8-
         omxPlayer.volDown();
       }
 
@@ -322,4 +327,5 @@ function noiseSpeak(message){
 
 }
 
+LEDControl.getInstance().setMode(LEDControl.BREATH_MODE);
 setTimeout( syncData , 3000);
