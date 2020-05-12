@@ -195,7 +195,7 @@ var songTime = 0;
 var prevSongTime = 0;
 function playSong(sng){
   var now =  (new Date()).getTime();
-  songTime = now;
+  songTime = 0;
   prevSongTime = now;
   omxPlayer.removeListener('close',songEnded);
   omxPlayer.newSource( getFile( sng ) );
@@ -209,6 +209,7 @@ function updateSongTime(){
   if(omxPlayer.running){
     var now =  (new Date()).getTime();
     songTime  += now - prevSongTime;
+    console.log("Delta:  "  + (now - prevSongTime));
     prevSongTime = now;
   }else{
     var now =  (new Date()).getTime()
