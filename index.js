@@ -194,8 +194,9 @@ function songEnded(){
 var songTime = 0;
 var prevSongTime = 0;
 function playSong(sng){
-  songTime = 0;
-  prevSongTime = 0;
+  var now =  (new Date()).getTime();
+  songTime = now;
+  prevSongTime = now;
   omxPlayer.removeListener('close',songEnded);
   omxPlayer.newSource( getFile( sng ) );
   omxPlayer.on('close' , songEnded);
@@ -206,7 +207,7 @@ function playSong(sng){
 
 function updateSongTime(){
   if(omxPlayer.running){
-    var now =  (new Date()).getTime()
+    var now =  (new Date()).getTime();
     songTime  += now - prevSongTime;
     prevSongTime = now;
   }else{
