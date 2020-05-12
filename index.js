@@ -155,6 +155,11 @@ TODO::
 
 */
 
+function processEvent(evt){
+  // event has message and code
+  console.log("Taking event " + evt.code + " ("+evt.message+")");
+}
+
 function doGeneralQuery(cb){
   let query = db.collection('robot_events').where('status','==',0).where('robot','==', myRobot);
 
@@ -163,9 +168,12 @@ function doGeneralQuery(cb){
                   let docs = querySnapshot.docs;
                   var doc = null;
                   for (doc of docs) {
-
-                      console.log("doc " +  doc.data());
                       console.log("doc " +  doc.id );
+
+
+                      console.log("doc " +  doc.data().content.code );
+
+                      processEvent({message:doc.data().content.message , code:doc.data().content.code });
 
                       /*
 
