@@ -45,7 +45,7 @@ const ACTIVITY_CHECK = 3;
 const STORYTELLING = 4;
 
 var firebase = require("firebase-admin");
-var serviceAccount = require("./noiseapptest-ec4b1-e28db7fb0b4c.json");
+var serviceAccount = require("../noiseapptest-ec4b1-e28db7fb0b4c.json");
 var session_test = "";
 
 var app = firebase.initializeApp({
@@ -57,7 +57,7 @@ var db = app.firestore();
 var state  = GENERAL_QUERY;
 var actualRoutineList = Array();
 
-AWS.config.loadFromPath('./config_aws.json');
+AWS.config.loadFromPath('../config_aws.json');
 
 const Polly = new AWS.Polly({
     signatureVersion: 'v4',
