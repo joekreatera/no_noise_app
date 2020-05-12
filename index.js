@@ -37,12 +37,12 @@ const AWS = require('aws-sdk');
 const Stream = require('stream');
 const Speaker = require('speaker');
 const fs = require('fs');
+const fileVault = "../noisesWavs/all/";
+const Omx = require('node-omxplayer');
 
 const GENERAL_QUERY = 0;
-const MORNING_ROUTINE_GET = 1;
-const BEDTIME_ROUTINE_GET = 2;
-const ACTIVITY_CHECK = 3;
-const STORYTELLING = 4;
+
+const omxPlayer = Omx();
 
 var firebase = require("firebase-admin");
 var serviceAccount = require("../noiseapptest-ec4b1-e28db7fb0b4c.json");
@@ -155,9 +155,24 @@ TODO::
 
 */
 
+function getFile(fl){
+  return fileVault+fl;
+}
+
 function processEvent(evt){
-  // event has message and code
+  // event has type and message {message}
   console.log("Taking event " + evt.code + " ("+evt.message+")");
+
+  if( evt.code == 1){
+    omxPlayer.volUp();
+  }
+  if( evt.code == 2){
+    omxPlayer.volDown();
+  }
+  if( evt.code == 3){
+    omxPlayer.newSource( getFile(evt.message) );
+  }
+
 }
 
 function doGeneralQuery(cb){
@@ -171,9 +186,9 @@ function doGeneralQuery(cb){
                       console.log("doc " +  doc.id );
 
 
-                      console.log("doc " +  doc.data().content.code );
+                      console.log("doc " +  doc.data().type );
 
-                      processEvent({message:doc.data().content.message , code:doc.data().content.code });
+                      processEvent({message:doc.data().content.message , code:doc.data().type });
 
                       /*
 
