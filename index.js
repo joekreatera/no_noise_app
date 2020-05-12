@@ -165,29 +165,34 @@ function getFile(fl){
 var loop = false;
 var loopPlaylist = false;
 var playlistMode = {playlistName:"", on:false, actualSong:0};
+var lastSongPlayed = "";
 function songEnded(){
   console.log("Song ended!!!! ");
   if( loop ){
+      console.log("Going to play : " + lastSongPlayed);
+      if( lastSongPlayed != "")
+      playSong(lastSongPlayed);
 
   }
-  if( loopPlaylist ){
-
-  }
-
   if( playlistMode.on){
     playlistMode.actualSong++;
 
     if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].songs.length  ){
       console.log("Going to play : " + playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
       playSong(playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
+    }else if( loopPlaylist ){
+        playlistMode.actualSong = 0;
+        playSong(playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
     }
   }
 }
 
 function playSong(sng){
+
   omxPlayer.removeListener('close',songEnded);
   omxPlayer.newSource( getFile( sng ) );
   omxPlayer.on('close' , songEnded);
+  lastSongPlayed = sng;
 }
 function processEvent(evt){
   // event has type and message {message}
@@ -202,6 +207,10 @@ function processEvent(evt){
   }else if( evt.code == 9){
     loopPlaylist = false;
   }else if (evt.code == 3){
+    playlistMode.playlistName = "";
+    playlistMode.on = false;
+    playlistMode.actualSong = 0;
+
     playSong(evt.message);
   }else if (evt.code == 10){
     playlistMode.playlistName = evt.message;
