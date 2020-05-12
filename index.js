@@ -43,7 +43,7 @@ const Omx = require('node-omxplayer');
 const GENERAL_QUERY = 0;
 
 const omxPlayer = Omx();
-omxPlayer.on('close' , songEnded);
+
 
 var playlistDatabase = require("./playlists.json");
 var firebase = require("firebase-admin");
@@ -161,11 +161,6 @@ function getFile(fl){
   return fileVault+fl;
 }
 
-function processOrder(order, evt){
-  if (order == 3){
-    omxPlayer.newSource( getFile(evt.message) );
-  }
-}
 
 var loop = false;
 var loopPlaylist = false;
@@ -185,7 +180,7 @@ function songEnded(){
     if( playlistMode.actualSong < playlistDatabase[playlistMode.playlistName].songs.length  ){
       console.log("Going to play : " + playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong]);
       omxPlayer.newSource( getFile( playlistDatabase[playlistMode.playlistName].songs[playlistMode.actualSong] ) );
-      omxPlayer.play();
+      omxPlayer.on('close' , songEnded);
     }
   }
 }
@@ -204,6 +199,7 @@ function processEvent(evt){
     loopPlaylist = false;
   }else if (evt.code == 3){
     omxPlayer.newSource( getFile(evt.message) );
+    omxPlayer.on('close' , songEnded);
     //omxpPlayer.play();
   }else if (evt.code == 10){
     playlistMode.playlistName = evt.message;
@@ -212,6 +208,7 @@ function processEvent(evt){
 
     console.log("Going to play : " + playlistDatabase[evt.message].songs[0]);
     omxPlayer.newSource( getFile( playlistDatabase[evt.message].songs[0] ) );
+    omxPlayer.on('close' , songEnded);
     //omxpPlayer.play();
   }else if( evt.code == 5){
     omxPlayer.play(); // not needed, pauses will toggle!
