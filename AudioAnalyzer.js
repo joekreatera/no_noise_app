@@ -14,7 +14,7 @@ class AudioAnalyzer{
       this.context = new AudioContext();
       this.pcmdata = [] ;
       this.sampleRate = null;
-     = this;
+     AudioAnalyzer.instance = this;
   }
 
   setSound(snd, fs){
