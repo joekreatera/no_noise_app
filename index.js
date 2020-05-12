@@ -202,14 +202,14 @@ function processEvent(evt){
     loopPlaylist = false;
   }else if (evt.code == 3){
     omxPlayer.newSource( getFile(evt.message) );
-    omxpPlayer.play();
+    //omxpPlayer.play();
   }else if (evt.code == 10){
     playlistMode.playlistName = evt.message;
     playlistMode.on = true;
     playlistMode.actualSong = 0;
 
     omxPlayer.newSource( getFile( playlistDatabase[evt.message][0] ) );
-    omxpPlayer.play();
+    //omxpPlayer.play();
   }else if( evt.code == 5){
     omxPlayer.play();
   }else{
