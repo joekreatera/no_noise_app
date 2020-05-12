@@ -70,7 +70,7 @@ class FCController{
     FCController.FREESTYLE_MODE = 3;
 
     FCController.FORWARD = 0;
-    FCController.PING_PING = 1;
+    FCController.PING_PONG = 1;
 
 
     this.fc = new FadeCandy();
@@ -79,6 +79,10 @@ class FCController{
 
 
   init(){
+
+    console.log("Mode " + FCController.mode);
+
+    console.log("Loop Mode " + FCController.loopMode);
 
     this.fc.on(FadeCandy.events.READY, function () {
 
@@ -122,11 +126,12 @@ class FCController{
             frame--;
           }
 
+
           if( frame == frameTotals || frame == 0){
             if( FCController.loopMode == FCController.FORWARD ){
               frame = 0;
             }
-            if( FCController.loopMode == FCController.PING_PING){
+            if( FCController.loopMode == FCController.PING_PONG){
               dir = !dir;
             }
           }

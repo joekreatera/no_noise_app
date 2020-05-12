@@ -328,5 +328,6 @@ function noiseSpeak(message){
 }
 
 LEDControl.setMode(LEDControl.BREATH_MODE);
+LEDControl.setLoopMode(LEDControl.PING_PONG);
 LEDControl.getInstance().init();
 setTimeout( syncData , 3000);
