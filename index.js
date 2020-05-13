@@ -365,8 +365,10 @@ function getColor(){
       }
     }
 
-    multiplier = max*1000;
-    console.log(max + " // " + multiplier + " _> "  + Math.floor(255*multplier) ) ;
+    multiplier = max*100;
+    console.log(max + " // " + multiplier + " _> "  + (255*multplier) ) ;
+    multiplier = Math.round( (255*multplier) );
+
   }
   return LEDControl.buildColor( Math.floor(255*multplier)  ,0,0);
 }
