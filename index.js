@@ -354,11 +354,19 @@ function noiseSpeak(message){
 
 function getColor(){
 
+  var multplier = 0.01;
   if(omxPlayer.running){
     var pcmdata= audioAnalyzer.getDataOnTime(songTime);
-    console.log(pcmdata);
+    var max = 0.0;
+    for(var i = 0; i < pcmdata.length ; i++){
+      console.log(pcmdata[i]);
+      if( max < pcmdata[i] ){
+        max= pcmdata[i];
+      }
+    }
+    multiplier = max;
   }
-  return LEDControl.buildColor( Math.floor(255*Math.random())  ,0,0);
+  return LEDControl.buildColor( Math.floor(255*multplier)  ,0,0);
 }
 
 // this should change as it does not reflect the internal state. Just with setMode or setLoopMode the variables should be set. idea?: make the static vars, instance vars.

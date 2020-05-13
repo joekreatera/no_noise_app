@@ -35,13 +35,16 @@ class AudioAnalyzer{
   /* s in  miliseconds according to song start*/
   getDataOnTime(s){
     console.log("Trying time" + s);
-    var index = Math.floor(AudioAnalyzer.getInstance().samplerate/1000)*s;
-    console.log("Tryning index  " + index);
-
-    if( index < AudioAnalyzer.getInstance().pcmdata.length ){
-      return AudioAnalyzer.getInstance().pcmdata[index];
+    var samples = Math.floor(AudioAnalyzer.getInstance().samplerate/1000);
+    var index = samples*s;
+    var allData = [];
+    var i = index;
+    while(i < AudioAnalyzer.getInstance().pcmdata.length && i < index+samples ){
+      allData.push( AudioAnalyzer.getInstance().pcmdata[i] );
+      i++;
     }
-    return AudioAnalyzer.getInstance().pcmdata[AudioAnalyzer.getInstance().pcmdata.length-1];
+
+    return allData;
   }
 
 }
