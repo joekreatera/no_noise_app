@@ -367,16 +367,16 @@ function getColor(){
         max= pcmdata[i];
       }
 
-      prom += pcmdata[i];
+      prom += Math.abs(pcmdata[i]);
 
     }
-    prom = prom/(1+pcmdata.length);
+    prom =  prom/(1+pcmdata.length);
 
     multiplier = (prom + pastMax)/2;
     pastMax = prom ;
 
     console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
-    multiplier = Math.min(255, Math.floor( (255*multiplier) ));
+    multiplier = Math.max(20,  Math.min(255, Math.floor( (255*multiplier) )) );
 
     return LEDControl.buildColor( 0  ,0, multiplier);
 
