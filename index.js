@@ -359,12 +359,12 @@ function getColor(){
     var pcmdata= audioAnalyzer.getDataOnTime(songTime);
     var max = 0.0;
     for(var i = 0; i < pcmdata.length ; i++){
-      console.log(pcmdata[i]);
+      //console.log(pcmdata[i]); // maybe average? although it would go to 0.
       if( max < pcmdata[i] ){
         max= pcmdata[i];
       }
     }
-    multiplier = max;
+    multiplier = max*300;
   }
   return LEDControl.buildColor( Math.floor(255*multplier)  ,0,0);
 }
