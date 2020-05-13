@@ -352,22 +352,30 @@ function noiseSpeak(message){
 
 }
 
+var pastMax = 0.0f
+
 function getColor(){
 
   var multiplier = 0.01;
   if(omxPlayer.running){
     var pcmdata= audioAnalyzer.getDataOnTime(songTime);
     var max = 0.0;
+    var min = 0.0;
     for(var i = 0; i < pcmdata.length ; i++){
       //console.log(pcmdata[i]); // maybe average? although it would go to 0.
       if( max < pcmdata[i] ){
         max= pcmdata[i];
       }
+      if( min > pcmdata[i] ){
+        min= pcmdata[i];
+      }
     }
 
-    multiplier = max*50;
-    console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
-    multiplier = Math.floor( (255*multplier) );
+    multiplier = (max*50 + pastMax)/2;
+    pastMax = max*50;
+
+    //console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
+    multiplier = Math.floor( (255*multiplier) );
 
   }
   return LEDControl.buildColor( Math.floor(255*multiplier)  ,0,0);
