@@ -372,8 +372,8 @@ function getColor(){
     }
     prom =  prom/(1+pcmdata.length);
 
-    multiplier = (prom + pastMax)/2;
-    pastMax = prom ;
+    multiplier = (prom*100 + pastMax)/2;
+    pastMax = prom*100 ;
 
     console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
     multiplier = Math.max(20,  Math.min(255, Math.floor( (255*multiplier) )) );
