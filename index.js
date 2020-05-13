@@ -352,7 +352,7 @@ function noiseSpeak(message){
 
 }
 
-var pastMax = 0.0f
+var pastMax = 0.0;
 
 function getColor(){
 
