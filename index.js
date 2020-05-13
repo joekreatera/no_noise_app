@@ -360,19 +360,20 @@ function getColor(){
   if(omxPlayer.running){
     var pcmdata= audioAnalyzer.getDataOnTime(songTime);
     var max = 0.0;
-    var min = 0.0;
+    var prom = 0.0;
     for(var i = 0; i < pcmdata.length ; i++){
       //console.log(pcmdata[i]); // maybe average? although it would go to 0.
       if( max < pcmdata[i] ){
         max= pcmdata[i];
       }
-      if( min > pcmdata[i] ){
-        min= pcmdata[i];
-      }
-    }
 
-    multiplier = (max*50 + pastMax)/2;
-    pastMax = max*50;
+      prom += pcmdata[i];
+
+    }
+    prom = prom/(1+pcmdata.length);
+
+    multiplier = (prom*50 + pastMax)/2;
+    pastMax = prom*50;
 
     //console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
     multiplier = Math.floor( (255*multiplier) );
