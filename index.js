@@ -372,13 +372,13 @@ function getColor(){
     }
     prom = prom/(1+pcmdata.length);
 
-    multiplier = (prom*50 + pastMax)/2;
-    pastMax = prom*50;
+    multiplier = (prom*25 + pastMax)/2;
+    pastMax = prom*25;
 
     //console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
     multiplier = Math.min(255, Math.floor( (255*multiplier) ));
 
-    return LEDControl.buildColor( multiplier  ,255-multiplier,0);
+    return LEDControl.buildColor( multiplier  ,0,255-multiplier);
 
   }
   return LEDControl.buildColor( Math.floor(255*multiplier)  ,0,0);
