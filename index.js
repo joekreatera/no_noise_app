@@ -376,7 +376,7 @@ function getColor(){
     multiplier = (prom*100 + pastMax)/2;
     pastMax = prom*100 ;
 
-    console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
+  //console.log(max + " // " + multiplier + " _> "  + (255*multiplier) ) ;
     multiplier = Math.max(100,  Math.min(255, Math.floor( (255*multiplier) )) );
 
     return LEDControl.buildColor( 128  ,128, multiplier);
