@@ -364,8 +364,9 @@ function getColor(){
         max= pcmdata[i];
       }
     }
-    console.log(max);
-    multiplier = max*500;
+
+    multiplier = max*1000;
+    console.log(max + " // " + multiplier + " _> "  + Math.floor(255*multplier) ) ;
   }
   return LEDControl.buildColor( Math.floor(255*multplier)  ,0,0);
 }
