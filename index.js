@@ -35,7 +35,7 @@ This will also handle respawning your application in the event that it crashes. 
 
 const AWS = require('aws-sdk');
 const Stream = require('stream');
-const Speaker = require('speaker');
+const Speaker = null //require('speaker');
 const fs = require('fs');
 const fileVault = "../noisesWavs/all/";
 const Omx = require('node-omxplayer');
@@ -46,6 +46,7 @@ const AudioAnalyzer = require('./AudioAnalyzer.js');
 const omxPlayer = Omx();
 const audioAnalyzer = new AudioAnalyzer();
 
+const ENABLE_POLLY = false;
 var playlistDatabase = require("./playlists.json");
 var firebase = require("firebase-admin");
 var serviceAccount = require("../noiseapptest-ec4b1-e28db7fb0b4c.json");
@@ -84,6 +85,8 @@ class GeneralComponents{
 
   static getPlayer(){
 
+      if( !ENABLE_POLLY)
+        return null;
           GeneralComponents.player =  new Speaker({
               channels: 1,
               bitDepth: 16,
@@ -142,11 +145,14 @@ Polly.synthesizeSpeech(params, (err, data) => {
                 console.log("The file was saved!")
             });*/
             // Initiate the source
-            let bufferStream = new Stream.PassThrough();
-            // convert AudioStream into a readable stream
-            bufferStream.end(data.AudioStream);
-            // Pipe into Player
-            bufferStream.pipe( GeneralComponents.getPlayer() );
+
+            if(ENABLE_POLLY){
+              let bufferStream = new Stream.PassThrough();
+              // convert AudioStream into a readable stream
+              bufferStream.end(data.AudioStream);
+              // Pipe into Player
+              bufferStream.pipe( GeneralComponents.getPlayer() );
+            }
         }
     }
 });
@@ -341,11 +347,14 @@ function noiseSpeak(message){
       } else if (data) {
           if (data.AudioStream instanceof Buffer) {
               // Initiate the source
-              let bufferStream = new Stream.PassThrough();
-              // convert AudioStream into a readable stream
-              bufferStream.end(data.AudioStream);
-              // Pipe into Player
-              bufferStream.pipe(GeneralComponents.getPlayer());
+
+              if(ENABLE_POLLY){
+                let bufferStream = new Stream.PassThrough();
+                // convert AudioStream into a readable stream
+                bufferStream.end(data.AudioStream);
+                // Pipe into Player
+                bufferStream.pipe(GeneralComponents.getPlayer());
+              }
           }
       }
   });
